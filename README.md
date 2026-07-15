@@ -1,60 +1,136 @@
 # 🧮 Advanced Calculator Pro
 
-Ek all-in-one calculator web-app — pure HTML, CSS aur JavaScript se bana hai (koi framework nahi), single `index.html` file me.
+An all-in-one calculator web application built using pure HTML, CSS, and JavaScript without any external frameworks. The entire application is contained in a single `index.html` file, making it lightweight, fast, and easy to use.
 
 ## 🚀 Live Demo
-[Yaha apni GitHub Pages link daalo]
+
+🔗 https://itsmeankita.github.io/Virtual-Calculator/
 
 ## ✨ Features
 
-### Calculator
-- Standard + Scientific mode (sin, cos, tan, sinh/cosh/tanh, log, ln, √, ∛, x², x³, 10ˣ, 1/x, n!, |x|, mod, nPr, nCr, π, e, random)
+### 🧮 Calculator
+- Standard and Scientific Calculator
+- Trigonometric functions (sin, cos, tan, sinh, cosh, tanh)
+- Logarithmic functions (log, ln)
+- Square root (√), Cube root (∛)
+- Powers (x², x³, 10ˣ)
+- Reciprocal (1/x)
+- Factorial (n!)
+- Absolute value (|x|)
+- Modulus (mod)
+- Permutation (nPr) and Combination (nCr)
+- Mathematical constants (π, e)
+- Random number generator
 - Memory functions (M+, M−, MR, MC)
-- Real expression parser — no `eval()`, handles brackets and operator precedence safely
-- Voice input (🎤 speak your calculation) and voice output (🔊 hear the result)
-- OCR — scan a photo of a calculation (📷) and auto-fill it
-- Copy result, share result, print result
+- Safe expression parser without using `eval()`
+- Supports brackets and operator precedence
+- Voice input (🎤 Speak your calculation)
+- Voice output (🔊 Read the result aloud)
+- OCR support (📷 Scan handwritten or printed calculations)
+- Copy, Share, and Print calculation results
 
-### 🟣 Programmer Calculator
-Binary / Octal / Decimal / Hex conversion, AND / OR / XOR / NOT, left/right bit shift
+### 💻 Programmer Calculator
+- Binary, Octal, Decimal, and Hexadecimal conversion
+- Bitwise operations (AND, OR, XOR, NOT)
+- Left Shift and Right Shift
 
-### 🟡 Financial Calculator
-EMI, GST, Discount, Tip, Loan, SIP, FD, RD, Simple Interest, Compound Interest
+### 💰 Financial Calculator
+- EMI Calculator
+- GST Calculator
+- Discount Calculator
+- Tip Calculator
+- Loan Calculator
+- SIP Calculator
+- Fixed Deposit (FD)
+- Recurring Deposit (RD)
+- Simple Interest
+- Compound Interest
 
-### 🟢 Health Calculator
-BMI, Age, BMR, Ideal Weight
+### ❤️ Health Calculator
+- BMI Calculator
+- Age Calculator
+- BMR Calculator
+- Ideal Weight Calculator
 
-### 🔵 Unit Converter
-Length, Weight, Temperature, Area, Volume, Speed, Time, Data Storage, Pressure, Energy
+### 📏 Unit Converter
+- Length
+- Weight
+- Temperature
+- Area
+- Volume
+- Speed
+- Time
+- Data Storage
+- Pressure
+- Energy
 
-### 🟣 Currency Converter
-INR / USD / EUR / GBP / JPY / AED with live exchange rates (needs internet)
+### 💱 Currency Converter
+- Supports INR, USD, EUR, GBP, JPY, AED
+- Live exchange rates (Internet connection required)
 
 ### 📜 History & Dashboard
-- Unlimited history saved in browser (LocalStorage)
-- Search, favorite ⭐, pin 📌, add notes 📝, delete single entries
-- Export as CSV or PDF, print history
-- Dashboard: total calculations, today's count, most used operator, weekly usage chart, favorites count
+- Unlimited calculation history stored using LocalStorage
+- Search history
+- Favorite calculations ⭐
+- Pin important calculations 📌
+- Add notes 📝
+- Delete individual entries
+- Export history as CSV or PDF
+- Print history
+- Dashboard with:
+  - Total calculations
+  - Today's calculations
+  - Most frequently used operator
+  - Weekly usage chart
+  - Favorites count
 
-### 🎨 UI
-- 9 built-in themes (Glass, Light, Neon, Material, Ocean, Sunset, Forest, Mono, Pastel)
-- Dark glassmorphism design with animated background
-- Fully responsive (mobile + desktop)
-- Adjustable font size, sound & vibration feedback toggles
-- English / हिन्दी language toggle
-- Keyboard shortcuts (digits, `+ - * /`, Enter, Backspace, Esc, brackets, `^`)
+### 🎨 User Interface
+- 9 Built-in themes
+  - Glass
+  - Light
+  - Neon
+  - Material
+  - Ocean
+  - Sunset
+  - Forest
+  - Mono
+  - Pastel
+- Modern Glassmorphism design
+- Animated background
+- Fully Responsive (Desktop & Mobile)
+- Adjustable font size
+- Sound and vibration feedback
+- English / Hindi language support
+- Keyboard shortcuts
+  - Numbers
+  - + − × ÷
+  - Enter
+  - Backspace
+  - Escape
+  - Brackets
+  - Exponent (^)
 
 ## 🛠️ Built With
-- HTML5, CSS3, Vanilla JavaScript
-- [Tesseract.js](https://github.com/naptha/tesseract.js) for OCR
-- [jsPDF](https://github.com/parallax/jsPDF) for PDF export
-- [open.er-api.com](https://www.exchangerate-api.com/) for live currency rates
-- Web Speech API for voice input/output
+
+- HTML5
+- CSS3
+- Vanilla JavaScript
+- Tesseract.js (OCR)
+- jsPDF (PDF Export)
+- Exchange Rate API (Live Currency Conversion)
+- Web Speech API (Voice Input & Output)
 
 ## 📌 Notes
-- Live currency rates and OCR require an active internet connection.
-- Voice input/output works best in Chrome/Edge (uses the browser's built-in Web Speech API).
-- This is a client-side app — all your history and settings are stored locally in your own browser (LocalStorage), never sent anywhere.
+
+- Live currency exchange rates require an active internet connection.
+- OCR functionality requires an internet connection to load OCR resources.
+- Voice input and output work best in Google Chrome and Microsoft Edge.
+- This is a fully client-side application.
+- All calculations, history, favorites, and settings are stored locally in your browser using LocalStorage.
+- No personal data is uploaded or stored on any server.
 
 ## 👤 Author
-**Itsmeankita**
+
+**Ankita Kumari**
+
+GitHub: https://github.com/Itsmeankita
