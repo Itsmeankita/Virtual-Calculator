@@ -26,7 +26,7 @@ It was built as a demonstration of clean vanilla JavaScript architecture — **n
 
 ## 🚀 Live Demo
 
-🔗 **[Add your GitHub Pages link here once it's live]**
+🔗 https://itsmeankita.github.io/Virtual-Calculator/
 
 ---
 
