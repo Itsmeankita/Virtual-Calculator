@@ -1,0 +1,1306 @@
+<!DOCTYPE html>
+<html lang="hi" data-theme="glass">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Advanced Calculator Pro — Easy Tutorials</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg-deep:#0b0e14; --edge:rgba(255,255,255,0.09);
+  --accent:#7dffb3; --accent-2:#5eb4ff; --op:#ffb454; --danger:#ff6b6b;
+  --text:#eef2f6; --muted:#7a8496; --card:rgba(255,255,255,0.045);
+  --aurora-op:0.55; --font-scale:1;
+}
+[data-theme="light"]{ --bg-deep:#eef1f6; --edge:rgba(0,0,0,0.08); --accent:#0e9f6e; --accent-2:#1a73e8; --op:#e08a00; --text:#1a1f29; --muted:#5c6474; --card:rgba(255,255,255,0.6); --aurora-op:0.12; }
+[data-theme="neon"]{ --bg-deep:#050505; --edge:rgba(255,0,200,0.18); --accent:#ff2ec4; --accent-2:#00f0ff; --op:#f8ff00; --text:#f5f5f5; --muted:#8a8a8a; --card:rgba(255,255,255,0.03); --aurora-op:0.6; }
+[data-theme="material"]{ --bg-deep:#121212; --edge:rgba(255,255,255,0.08); --accent:#03dac6; --accent-2:#bb86fc; --op:#ffb300; --text:#e6e1e5; --muted:#928f96; --card:rgba(255,255,255,0.04); --aurora-op:0.3; }
+[data-theme="ocean"]{ --bg-deep:#061b2c; --edge:rgba(120,200,255,0.14); --accent:#4fd1c5; --accent-2:#63b3ed; --op:#f6ad55; --text:#e7f6ff; --muted:#7fa4bd; --card:rgba(255,255,255,0.04); --aurora-op:0.5; }
+[data-theme="sunset"]{ --bg-deep:#1a0f1c; --edge:rgba(255,170,120,0.15); --accent:#ff7e5f; --accent-2:#feb47b; --op:#ffd36e; --text:#fff0e8; --muted:#c99a9a; --card:rgba(255,255,255,0.04); --aurora-op:0.5; }
+[data-theme="forest"]{ --bg-deep:#0c1810; --edge:rgba(150,255,180,0.13); --accent:#7bd389; --accent-2:#4fb286; --op:#e0c568; --text:#eafff0; --muted:#83a68f; --card:rgba(255,255,255,0.04); --aurora-op:0.45; }
+[data-theme="mono"]{ --bg-deep:#101010; --edge:rgba(255,255,255,0.1); --accent:#e6e6e6; --accent-2:#a0a0a0; --op:#c9c9c9; --text:#f2f2f2; --muted:#7d7d7d; --card:rgba(255,255,255,0.04); --aurora-op:0.15; }
+[data-theme="pastel"]{ --bg-deep:#fdf3f7; --edge:rgba(0,0,0,0.06); --accent:#f7a1c4; --accent-2:#a1c9f7; --op:#f7d3a1; --text:#4a3b45; --muted:#9a8894; --card:rgba(255,255,255,0.7); --aurora-op:0.15; }
+[data-theme="glass"]{ }
+
+*{ margin:0; padding:0; box-sizing:border-box; }
+html,body{ height:100%; }
+body{
+  font-family:'Space Grotesk', sans-serif; background:var(--bg-deep); color:var(--text);
+  min-height:100vh; position:relative; font-size:calc(15px * var(--font-scale));
+  transition: background .3s ease, color .3s ease;
+}
+.aurora{ position:fixed; inset:-20%; z-index:0; filter:blur(80px) saturate(130%); opacity:var(--aurora-op);
+  background:
+    radial-gradient(38% 32% at 18% 22%, #1f6f52 0%, transparent 60%),
+    radial-gradient(35% 30% at 82% 18%, #24476f 0%, transparent 60%),
+    radial-gradient(45% 40% at 50% 85%, #3a2a5c 0%, transparent 60%);
+  animation: drift 18s ease-in-out infinite alternate; }
+@keyframes drift{ 0%{transform:translate3d(0,0,0) scale(1);} 100%{transform:translate3d(2%,-3%,0) scale(1.08);} }
+.grain{ position:fixed; inset:0; z-index:1; pointer-events:none;
+  background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='0.035'/%3E%3C/svg%3E");
+  mix-blend-mode:overlay; }
+
+a{ color:inherit; }
+.app{ position:relative; z-index:2; max-width:1200px; margin:0 auto; padding:18px 16px 60px; }
+
+header{ display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:10px; }
+.brand{ font-family:'JetBrains Mono', monospace; font-size:13px; letter-spacing:0.12em; text-transform:uppercase; color:var(--muted); }
+.brand span{ color:var(--accent); }
+.header-icons{ display:flex; gap:8px; }
+.icon-pill{
+  background:var(--card); border:1px solid var(--edge); color:var(--text);
+  font-family:'JetBrains Mono', monospace; font-size:12px; padding:8px 12px; border-radius:999px;
+  cursor:pointer; display:flex; align-items:center; gap:6px; backdrop-filter:blur(12px);
+}
+.icon-pill:hover{ border-color:var(--accent-2); }
+
+.tabs{ display:flex; gap:8px; flex-wrap:wrap; margin-bottom:18px; }
+.tab-btn{
+  background:var(--card); border:1px solid var(--edge); color:var(--muted);
+  font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.05em;
+  padding:9px 16px; border-radius:999px; cursor:pointer; backdrop-filter:blur(12px);
+  transition:all .15s ease;
+}
+.tab-btn.active{ background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#08110c; font-weight:700; border-color:transparent; }
+
+.view{ display:none; }
+.view.active{ display:block; }
+
+.grid2{ display:grid; grid-template-columns: 1.3fr 1fr; gap:16px; align-items:start; }
+@media (max-width:820px){ .grid2{ grid-template-columns:1fr; } }
+
+.card{
+  background:linear-gradient(160deg, var(--card), rgba(255,255,255,0.01));
+  border:1px solid var(--edge); border-radius:24px; padding:20px;
+  backdrop-filter:blur(18px); box-shadow:0 20px 50px -25px rgba(0,0,0,0.6);
+}
+
+/* ---- calculator ---- */
+.top-row{ display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; }
+.pill-group{ display:flex; gap:6px; background:rgba(0,0,0,0.2); padding:4px; border-radius:999px; border:1px solid var(--edge); }
+.pill{ font-family:'JetBrains Mono', monospace; font-size:11px; padding:6px 12px; border-radius:999px; background:transparent; border:0; color:var(--muted); cursor:pointer; }
+.pill.active{ background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#08110c; font-weight:700; }
+.mem-indicator{ font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--accent-2); opacity:0; transition:opacity .2s; }
+.mem-indicator.show{ opacity:1; }
+
+.display{ background:rgba(0,0,0,0.28); border:1px solid var(--edge); border-radius:18px; padding:16px 16px 12px; margin-bottom:14px; text-align:right; position:relative; overflow:hidden; }
+.display::before{ content:""; position:absolute; top:0; left:0; right:0; height:1px; background:linear-gradient(90deg,transparent,var(--accent-2),transparent); opacity:.5; }
+.expr{ font-family:'JetBrains Mono', monospace; font-size:12.5px; color:var(--muted); min-height:16px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+.result{ font-family:'JetBrains Mono', monospace; font-size:32px; font-weight:500; color:var(--text); white-space:nowrap; overflow:hidden; text-overflow:ellipsis; margin-top:4px; cursor:pointer; }
+
+.keys{ display:grid; grid-template-columns:repeat(4,1fr); gap:8px; }
+.keys.sci{ grid-template-columns:repeat(5,1fr); margin-bottom:8px; }
+.keys.sci2{ grid-template-columns:repeat(6,1fr); margin-bottom:8px; }
+button{ border:0; outline:0; height:52px; border-radius:13px; background:rgba(255,255,255,0.035); border:1px solid rgba(255,255,255,0.06); color:var(--text);
+  font-family:'Space Grotesk',sans-serif; font-size:15px; font-weight:500; cursor:pointer; transition:transform .08s ease, background .18s ease; }
+.keys.sci button, .keys.sci2 button{ height:42px; font-size:12.5px; }
+button:hover{ background:rgba(255,255,255,0.08); }
+button:active{ transform:scale(0.94); }
+button.op{ color:var(--op); font-weight:600; }
+button.func{ color:var(--accent-2); font-weight:600; }
+button.sci-fn{ color:#c9a7ff; }
+[data-theme="light"] button.sci-fn, [data-theme="pastel"] button.sci-fn{ color:#8a4fd6; }
+button.mem{ color:#ffd166; font-weight:600; }
+button.equal{ grid-column:span 2; background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#08110c; font-weight:700; }
+button.zero{ grid-column:span 2; }
+button.flash{ box-shadow:inset 0 0 0 2px var(--accent-2); }
+button:disabled{ opacity:.25; cursor:not-allowed; }
+
+.npr-row{ display:flex; gap:8px; margin-top:10px; align-items:center; }
+.npr-row input{ width:60px; }
+
+.footer-row{ display:flex; justify-content:space-between; align-items:center; margin-top:12px; flex-wrap:wrap; gap:8px; }
+.mode-label{ font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted); letter-spacing:0.06em; }
+.icon-btn{ background:transparent; border:1px solid var(--edge); color:var(--muted); font-size:11px; font-family:'JetBrains Mono', monospace; cursor:pointer; height:auto; padding:6px 10px; border-radius:8px; }
+.icon-btn:hover{ color:var(--accent); }
+.icon-btn.active-toggle{ color:var(--accent); border-color:var(--accent); }
+
+/* forms (financial/health/converter) */
+.form-title{ font-family:'JetBrains Mono', monospace; font-size:12px; letter-spacing:0.1em; text-transform:uppercase; color:var(--accent-2); margin-bottom:14px; }
+.sub-tabs{ display:flex; gap:6px; flex-wrap:wrap; margin-bottom:16px; }
+.sub-tab{ font-family:'JetBrains Mono', monospace; font-size:11px; padding:6px 12px; border-radius:8px; background:rgba(255,255,255,0.03); border:1px solid var(--edge); color:var(--muted); cursor:pointer; }
+.sub-tab.active{ background:var(--accent); color:#08110c; border-color:transparent; font-weight:700; }
+.field{ margin-bottom:12px; }
+.field label{ display:block; font-size:12px; color:var(--muted); margin-bottom:5px; font-family:'JetBrains Mono', monospace; }
+.field input, .field select{
+  width:100%; padding:11px 12px; border-radius:10px; background:rgba(0,0,0,0.25);
+  border:1px solid var(--edge); color:var(--text); font-family:'Space Grotesk',sans-serif; font-size:14px;
+}
+.field input:focus, .field select:focus{ outline:none; border-color:var(--accent-2); }
+.row2{ display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+.row3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:10px; }
+.btn-primary{
+  width:100%; padding:13px; border-radius:12px; border:0; cursor:pointer;
+  background:linear-gradient(135deg,var(--accent),var(--accent-2)); color:#08110c; font-weight:700;
+  font-family:'Space Grotesk',sans-serif; font-size:14px; margin-top:6px;
+}
+.result-box{ margin-top:16px; padding:16px; border-radius:14px; background:rgba(0,0,0,0.25); border:1px solid var(--edge); }
+.result-box .r-line{ display:flex; justify-content:space-between; font-family:'JetBrains Mono', monospace; font-size:13px; color:var(--muted); padding:4px 0; }
+.result-box .r-line b{ color:var(--text); font-size:14px; }
+.result-box .r-main{ font-size:26px; color:var(--accent); font-weight:700; margin-bottom:8px; font-family:'JetBrains Mono', monospace; }
+
+/* programmer */
+.base-display{ display:grid; grid-template-columns:60px 1fr; gap:8px; margin-bottom:6px; align-items:center; }
+.base-display .lbl{ font-family:'JetBrains Mono', monospace; font-size:11px; color:var(--muted); }
+.base-display .val{ font-family:'JetBrains Mono', monospace; font-size:15px; background:rgba(0,0,0,0.25); border:1px solid var(--edge); border-radius:8px; padding:8px 10px; overflow-x:auto; white-space:nowrap; }
+.base-tabs{ display:flex; gap:6px; margin:14px 0; }
+.prog-keys{ display:grid; grid-template-columns:repeat(4,1fr); gap:7px; }
+
+/* history */
+.hist-search{ margin-bottom:10px; }
+.history-list{ display:flex; flex-direction:column; gap:8px; max-height:420px; overflow-y:auto; }
+.hist-item{ font-family:'JetBrains Mono', monospace; font-size:12px; padding:10px; border-radius:10px; background:rgba(255,255,255,0.03); border:1px solid transparent; cursor:pointer; }
+.hist-item:hover{ background:rgba(255,255,255,0.07); border-color:var(--edge); }
+.hist-item .h-top{ display:flex; justify-content:space-between; align-items:center; }
+.hist-item .h-expr{ color:var(--muted); font-size:11px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; max-width:170px; }
+.hist-item .h-res{ color:var(--accent); font-size:14px; margin-top:2px; }
+.hist-item .h-note{ color:var(--accent-2); font-size:11px; margin-top:4px; font-style:italic; }
+.hist-actions{ display:flex; gap:4px; }
+.hist-actions button{ height:24px; width:24px; font-size:12px; padding:0; background:transparent; border:1px solid var(--edge); border-radius:6px; }
+.hist-actions button.on{ color:var(--accent); border-color:var(--accent); }
+.hist-empty{ color:var(--muted); font-size:11px; font-family:'JetBrains Mono', monospace; opacity:.6; }
+.hist-toolbar{ display:flex; gap:6px; margin-top:12px; flex-wrap:wrap; }
+.hist-toolbar button{ flex:1; height:34px; font-size:11px; background:rgba(255,255,255,0.04); border:1px solid var(--edge); border-radius:8px; }
+
+/* dashboard */
+.stat-grid{ display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:14px; }
+.stat-box{ background:rgba(0,0,0,0.25); border:1px solid var(--edge); border-radius:12px; padding:12px; }
+.stat-box .num{ font-size:24px; font-weight:700; color:var(--accent); font-family:'JetBrains Mono', monospace; }
+.stat-box .lbl{ font-size:11px; color:var(--muted); margin-top:2px; }
+.bars{ display:flex; align-items:flex-end; gap:6px; height:80px; margin-top:6px; }
+.bars .bar{ flex:1; background:linear-gradient(180deg,var(--accent-2),var(--accent)); border-radius:4px 4px 0 0; min-height:3px; }
+.bars-lbls{ display:flex; gap:6px; margin-top:4px; }
+.bars-lbls span{ flex:1; text-align:center; font-size:9px; color:var(--muted); font-family:'JetBrains Mono', monospace; }
+
+/* overlay panels */
+.overlay{ position:fixed; inset:0; background:rgba(0,0,0,0.55); z-index:50; display:none; align-items:flex-start; justify-content:flex-end; padding:16px; }
+.overlay.show{ display:flex; }
+.overlay-panel{ width:340px; max-width:92vw; max-height:94vh; overflow-y:auto; background:var(--bg-deep); border:1px solid var(--edge); border-radius:20px; padding:20px; }
+.overlay-head{ display:flex; justify-content:space-between; align-items:center; margin-bottom:16px; }
+.overlay-head h2{ font-size:15px; font-family:'JetBrains Mono', monospace; letter-spacing:0.06em; }
+.close-x{ background:transparent; border:1px solid var(--edge); width:30px; height:30px; border-radius:8px; color:var(--muted); }
+
+.settings-item{ display:flex; justify-content:space-between; align-items:center; padding:10px 0; border-bottom:1px solid var(--edge); font-size:13px; }
+.switch{ width:40px; height:22px; border-radius:999px; background:rgba(255,255,255,0.1); border:1px solid var(--edge); position:relative; cursor:pointer; }
+.switch.on{ background:var(--accent); }
+.switch::after{ content:""; position:absolute; top:2px; left:2px; width:16px; height:16px; border-radius:50%; background:#fff; transition:left .18s ease; }
+.switch.on::after{ left:20px; }
+.theme-grid{ display:grid; grid-template-columns:repeat(5,1fr); gap:8px; margin:10px 0; }
+.theme-dot{ width:100%; aspect-ratio:1; border-radius:50%; cursor:pointer; border:2px solid transparent; }
+.theme-dot.active{ border-color:var(--text); }
+
+.toast{ position:fixed; bottom:24px; left:50%; transform:translateX(-50%) translateY(20px); background:rgba(20,24,32,0.95); border:1px solid var(--edge); padding:10px 18px; border-radius:999px; font-family:'JetBrains Mono', monospace; font-size:12px; color:var(--accent); opacity:0; transition:all .25s ease; pointer-events:none; z-index:100; }
+.toast.show{ opacity:1; transform:translateX(-50%) translateY(0); }
+
+.help-text{ font-size:12px; color:var(--muted); line-height:1.6; }
+.help-text kbd{ background:rgba(255,255,255,0.08); padding:1px 6px; border-radius:4px; font-family:'JetBrains Mono', monospace; }
+
+@media (max-width:400px){
+  .keys button{ height:46px; font-size:14px; }
+  .result{ font-size:26px; }
+}
+</style>
+</head>
+<body>
+
+<div class="aurora"></div>
+<div class="grain"></div>
+
+<div class="app">
+  <header>
+    <div class="brand">Easy&nbsp;Tutorials <span>//</span> <span data-i18n="title">Advanced Calculator Pro</span></div>
+    <div class="header-icons">
+      <button class="icon-pill" id="openHistory">📜 <span data-i18n="history">History</span></button>
+      <button class="icon-pill" id="openDashboard">📊 <span data-i18n="dashboard">Dashboard</span></button>
+      <button class="icon-pill" id="openSettings">⚙️ <span data-i18n="settings">Settings</span></button>
+    </div>
+  </header>
+
+  <div class="tabs" id="mainTabs">
+    <button class="tab-btn active" data-view="calc" data-i18n="tabCalc">🧮 Calculator</button>
+    <button class="tab-btn" data-view="programmer" data-i18n="tabProg">🟣 Programmer</button>
+    <button class="tab-btn" data-view="financial" data-i18n="tabFin">🟡 Financial</button>
+    <button class="tab-btn" data-view="health" data-i18n="tabHealth">🟢 Health</button>
+    <button class="tab-btn" data-view="converter" data-i18n="tabConv">🔵 Unit Converter</button>
+    <button class="tab-btn" data-view="currency" data-i18n="tabCur">🟣 Currency</button>
+  </div>
+
+  <!-- ============ CALCULATOR VIEW ============ -->
+  <section class="view active" id="view-calc">
+    <div class="card" style="max-width:420px; margin:0 auto;">
+      <div class="top-row">
+        <div class="pill-group">
+          <button class="pill active" data-mode="basic">BASIC</button>
+          <button class="pill" data-mode="sci">SCIENTIFIC</button>
+        </div>
+        <div class="mem-indicator" id="memIndicator">M</div>
+      </div>
+
+      <div class="display">
+        <div class="expr" id="expr">&nbsp;</div>
+        <div class="result" id="result" title="Click to copy">0</div>
+      </div>
+
+      <div id="sciBlock" style="display:none;">
+        <div class="keys sci">
+          <button class="sci-fn" data-fn="sin">sin</button>
+          <button class="sci-fn" data-fn="cos">cos</button>
+          <button class="sci-fn" data-fn="tan">tan</button>
+          <button class="sci-fn" data-fn="log">log</button>
+          <button class="sci-fn" data-fn="ln">ln</button>
+          <button class="sci-fn" data-fn="sinh">sinh</button>
+          <button class="sci-fn" data-fn="cosh">cosh</button>
+          <button class="sci-fn" data-fn="tanh">tanh</button>
+          <button class="sci-fn" data-fn="abs">|x|</button>
+          <button class="sci-fn" data-fn="cbrt">∛</button>
+        </div>
+        <div class="keys sci2">
+          <button class="sci-fn" data-value="π" data-action="pi">π</button>
+          <button class="sci-fn" data-value="e" data-action="euler">e</button>
+          <button class="sci-fn" data-action="sq">x²</button>
+          <button class="sci-fn" data-action="cube">x³</button>
+          <button class="sci-fn" data-action="pow10">10ˣ</button>
+          <button class="sci-fn" data-action="inv">1/x</button>
+          <button class="sci-fn" data-fn="sqrt">√</button>
+          <button class="sci-fn" data-value="(">(</button>
+          <button class="sci-fn" data-value=")">)</button>
+          <button class="sci-fn" data-value="^">xʸ</button>
+        </div>
+        <div class="keys sci2">
+          <button class="sci-fn" data-action="fact">n!</button>
+          <button class="sci-fn" data-action="modop">mod</button>
+          <button class="sci-fn" data-action="rand">RND</button>
+          <button class="sci-fn" data-action="roundf">Round</button>
+          <button class="sci-fn" data-action="floorf">Floor</button>
+          <button class="sci-fn" id="degToggle" data-action="degrad">DEG</button>
+        </div>
+        <div class="npr-row">
+          <input type="number" id="nprN" placeholder="n" />
+          <input type="number" id="nprR" placeholder="r" />
+          <button class="icon-btn" id="doNpr">nPr</button>
+          <button class="icon-btn" id="doNcr">nCr</button>
+        </div>
+      </div>
+
+      <div class="keys" style="margin-top:10px;">
+        <button class="mem" data-action="mc">MC</button>
+        <button class="mem" data-action="mplus">M+</button>
+        <button class="mem" data-action="mminus">M−</button>
+        <button class="mem" data-action="mr">MR</button>
+
+        <button class="func" data-action="clear">AC</button>
+        <button class="func" data-action="del">DEL</button>
+        <button class="func" data-action="percent">%</button>
+        <button class="op" data-value="/">÷</button>
+
+        <button data-value="7">7</button>
+        <button data-value="8">8</button>
+        <button data-value="9">9</button>
+        <button class="op" data-value="*">×</button>
+
+        <button data-value="4">4</button>
+        <button data-value="5">5</button>
+        <button data-value="6">6</button>
+        <button class="op" data-value="-">−</button>
+
+        <button data-value="1">1</button>
+        <button data-value="2">2</button>
+        <button data-value="3">3</button>
+        <button class="op" data-value="+">+</button>
+
+        <button class="zero" data-value="0">0</button>
+        <button data-value=".">.</button>
+        <button class="equal" data-action="equals">=</button>
+      </div>
+
+      <div class="footer-row">
+        <span class="mode-label" id="modeLabel">READY</span>
+        <div style="display:flex; gap:6px;">
+          <button class="icon-btn" id="voiceInBtn">🎤</button>
+          <button class="icon-btn" id="voiceOutToggle">🔊</button>
+          <label class="icon-btn" style="cursor:pointer;">📷<input type="file" id="ocrInput" accept="image/*" style="display:none;"></label>
+          <button class="icon-btn" id="shareBtn">📤</button>
+          <button class="icon-btn" id="printBtn">🖨️</button>
+        </div>
+      </div>
+      <div class="mode-label" id="ocrStatus" style="margin-top:6px;"></div>
+    </div>
+  </section>
+
+  <!-- ============ PROGRAMMER VIEW ============ -->
+  <section class="view" id="view-programmer">
+    <div class="card" style="max-width:420px; margin:0 auto;">
+      <div class="form-title">Programmer Calculator</div>
+      <div class="base-display"><span class="lbl">HEX</span><div class="val" id="pHex">0</div></div>
+      <div class="base-display"><span class="lbl">DEC</span><div class="val" id="pDec">0</div></div>
+      <div class="base-display"><span class="lbl">OCT</span><div class="val" id="pOct">0</div></div>
+      <div class="base-display"><span class="lbl">BIN</span><div class="val" id="pBin">0</div></div>
+
+      <div class="base-tabs">
+        <button class="sub-tab active" data-base="16">HEX</button>
+        <button class="sub-tab" data-base="10">DEC</button>
+        <button class="sub-tab" data-base="8">OCT</button>
+        <button class="sub-tab" data-base="2">BIN</button>
+      </div>
+
+      <div class="prog-keys" id="progKeys">
+        <button data-pk="A">A</button><button data-pk="B">B</button><button data-pk="C">C</button><button class="func" data-pa="clear">AC</button>
+        <button data-pk="D">D</button><button data-pk="E">E</button><button data-pk="F">F</button><button class="func" data-pa="del">DEL</button>
+        <button data-pk="7">7</button><button data-pk="8">8</button><button data-pk="9">9</button><button class="op" data-pa="AND">AND</button>
+        <button data-pk="4">4</button><button data-pk="5">5</button><button data-pk="6">6</button><button class="op" data-pa="OR">OR</button>
+        <button data-pk="1">1</button><button data-pk="2">2</button><button data-pk="3">3</button><button class="op" data-pa="XOR">XOR</button>
+        <button data-pk="0">0</button><button class="op" data-pa="NOT">NOT</button><button class="op" data-pa="LSH">&lt;&lt;</button><button class="op" data-pa="RSH">&gt;&gt;</button>
+        <button class="op" data-pa="+">+</button><button class="op" data-pa="-">−</button><button class="op" data-pa="*">×</button><button class="equal" data-pa="=">=</button>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ FINANCIAL VIEW ============ -->
+  <section class="view" id="view-financial">
+    <div class="grid2">
+      <div class="card">
+        <div class="sub-tabs" id="finTabs">
+          <button class="sub-tab active" data-fin="emi">EMI</button>
+          <button class="sub-tab" data-fin="gst">GST</button>
+          <button class="sub-tab" data-fin="discount">Discount</button>
+          <button class="sub-tab" data-fin="tip">Tip</button>
+          <button class="sub-tab" data-fin="loan">Loan</button>
+          <button class="sub-tab" data-fin="sip">SIP</button>
+          <button class="sub-tab" data-fin="fd">FD</button>
+          <button class="sub-tab" data-fin="rd">RD</button>
+          <button class="sub-tab" data-fin="si">Simple Interest</button>
+          <button class="sub-tab" data-fin="ci">Compound Interest</button>
+        </div>
+        <div id="finForm"></div>
+      </div>
+      <div class="card">
+        <div class="form-title">Result</div>
+        <div id="finResult" class="result-box"><div class="mode-label">Form fill karke Calculate dabao</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ HEALTH VIEW ============ -->
+  <section class="view" id="view-health">
+    <div class="grid2">
+      <div class="card">
+        <div class="sub-tabs" id="healthTabs">
+          <button class="sub-tab active" data-health="bmi">BMI</button>
+          <button class="sub-tab" data-health="age">Age</button>
+          <button class="sub-tab" data-health="bmr">BMR</button>
+          <button class="sub-tab" data-health="ideal">Ideal Weight</button>
+        </div>
+        <div id="healthForm"></div>
+      </div>
+      <div class="card">
+        <div class="form-title">Result</div>
+        <div id="healthResult" class="result-box"><div class="mode-label">Form fill karke Calculate dabao</div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ CONVERTER VIEW ============ -->
+  <section class="view" id="view-converter">
+    <div class="card" style="max-width:420px; margin:0 auto;">
+      <div class="form-title">Unit Converter</div>
+      <div class="field">
+        <label>Category</label>
+        <select id="convCategory"></select>
+      </div>
+      <div class="row2">
+        <div class="field"><label>From</label><select id="convFrom"></select></div>
+        <div class="field"><label>To</label><select id="convTo"></select></div>
+      </div>
+      <div class="field"><label>Value</label><input type="number" id="convValue" value="1"></div>
+      <button class="btn-primary" id="convGo">Convert</button>
+      <div class="result-box" id="convResult" style="display:none;"></div>
+    </div>
+  </section>
+
+  <!-- ============ CURRENCY VIEW ============ -->
+  <section class="view" id="view-currency">
+    <div class="card" style="max-width:420px; margin:0 auto;">
+      <div class="form-title">Currency Converter <span id="rateStatus" class="mode-label"></span></div>
+      <div class="row2">
+        <div class="field"><label>From</label><select id="curFrom"></select></div>
+        <div class="field"><label>To</label><select id="curTo"></select></div>
+      </div>
+      <div class="field"><label>Amount</label><input type="number" id="curValue" value="1"></div>
+      <button class="btn-primary" id="curGo">Convert</button>
+      <button class="icon-btn" id="curRefresh" style="margin-top:8px; width:100%;">🔄 Refresh live rates</button>
+      <div class="result-box" id="curResult" style="display:none;"></div>
+    </div>
+  </section>
+</div>
+
+<!-- ===== History overlay ===== -->
+<div class="overlay" id="historyOverlay">
+  <div class="overlay-panel">
+    <div class="overlay-head"><h2>📜 History</h2><button class="close-x" data-close="historyOverlay">✕</button></div>
+    <input class="field" style="width:100%; padding:9px 10px; border-radius:8px; background:rgba(0,0,0,.25); border:1px solid var(--edge); color:var(--text);" id="histSearch" placeholder="🔍 Search history...">
+    <div class="history-list" id="historyList" style="margin-top:10px;"></div>
+    <div class="hist-toolbar">
+      <button id="histExportCsv">📂 CSV</button>
+      <button id="histExportPdf">📄 PDF</button>
+      <button id="histPrint">🖨️ Print</button>
+      <button id="histClearAll">🗑️ Clear All</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== Dashboard overlay ===== -->
+<div class="overlay" id="dashboardOverlay">
+  <div class="overlay-panel">
+    <div class="overlay-head"><h2>📊 Dashboard</h2><button class="close-x" data-close="dashboardOverlay">✕</button></div>
+    <div class="stat-grid">
+      <div class="stat-box"><div class="num" id="statTotal">0</div><div class="lbl">Total Calculations</div></div>
+      <div class="stat-box"><div class="num" id="statToday">0</div><div class="lbl">Today</div></div>
+      <div class="stat-box"><div class="num" id="statOp">-</div><div class="lbl">Most Used Operator</div></div>
+      <div class="stat-box"><div class="num" id="statFav">0</div><div class="lbl">Favorites</div></div>
+    </div>
+    <div class="form-title">Weekly Usage</div>
+    <div class="bars" id="weekBars"></div>
+    <div class="bars-lbls" id="weekLbls"></div>
+  </div>
+</div>
+
+<!-- ===== Settings overlay ===== -->
+<div class="overlay" id="settingsOverlay">
+  <div class="overlay-panel">
+    <div class="overlay-head"><h2>⚙️ Settings</h2><button class="close-x" data-close="settingsOverlay">✕</button></div>
+
+    <div class="form-title">Theme</div>
+    <div class="theme-grid" id="themeGrid"></div>
+
+    <div class="settings-item"><span>Save History</span><div class="switch" id="swSaveHistory"></div></div>
+    <div class="settings-item"><span>Button Sound</span><div class="switch" id="swSound"></div></div>
+    <div class="settings-item"><span>Vibration (mobile)</span><div class="switch" id="swVibrate"></div></div>
+    <div class="settings-item"><span>Voice Output on =</span><div class="switch" id="swVoiceOut"></div></div>
+    <div class="settings-item"><span>Language / भाषा</span>
+      <select id="langSelect" style="background:rgba(0,0,0,.25); color:var(--text); border:1px solid var(--edge); border-radius:6px; padding:4px 8px;">
+        <option value="en">English</option>
+        <option value="hi">हिन्दी</option>
+      </select>
+    </div>
+    <div class="settings-item"><span>Font Size</span>
+      <select id="fontSelect" style="background:rgba(0,0,0,.25); color:var(--text); border:1px solid var(--edge); border-radius:6px; padding:4px 8px;">
+        <option value="0.9">Small</option>
+        <option value="1" selected>Medium</option>
+        <option value="1.15">Large</option>
+      </select>
+    </div>
+
+    <div class="form-title" style="margin-top:16px;">⌨️ Keyboard Shortcuts</div>
+    <div class="help-text">
+      <kbd>0-9</kbd> digits &nbsp; <kbd>+ - * /</kbd> operators<br>
+      <kbd>Enter</kbd> = equals &nbsp; <kbd>Backspace</kbd> delete<br>
+      <kbd>Esc</kbd> clear &nbsp; <kbd>( )</kbd> brackets &nbsp; <kbd>^</kbd> power
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast">Copied!</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/4.1.1/tesseract.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+
+<script>
+(function(){
+"use strict";
+
+/* ===================== SETTINGS + STORAGE ===================== */
+const LS_HISTORY = 'calc_history_v1';
+const LS_SETTINGS = 'calc_settings_v1';
+
+let settings = Object.assign({
+  theme:'glass', saveHistory:true, sound:true, vibrate:true, voiceOut:false, lang:'en', font:1
+}, JSON.parse(localStorage.getItem(LS_SETTINGS) || '{}'));
+
+let history = JSON.parse(localStorage.getItem(LS_HISTORY) || '[]');
+
+function saveSettings(){ localStorage.setItem(LS_SETTINGS, JSON.stringify(settings)); }
+function saveHistoryLS(){ localStorage.setItem(LS_HISTORY, JSON.stringify(history)); }
+
+function applyTheme(){
+  document.documentElement.dataset.theme = settings.theme;
+  document.documentElement.style.setProperty('--font-scale', settings.font);
+}
+applyTheme();
+
+function beep(){
+  if(!settings.sound) return;
+  try{
+    const ctx = new (window.AudioContext||window.webkitAudioContext)();
+    const o = ctx.createOscillator(); const g = ctx.createGain();
+    o.type='sine'; o.frequency.value=680; g.gain.value=0.04;
+    o.connect(g); g.connect(ctx.destination); o.start();
+    setTimeout(()=>{ o.stop(); ctx.close(); }, 40);
+  }catch(e){}
+}
+function vibrate(){ if(settings.vibrate && navigator.vibrate) navigator.vibrate(12); }
+function toast(msg){
+  const t = document.getElementById('toast');
+  t.textContent = msg; t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 1400);
+}
+
+/* ===================== TAB NAVIGATION ===================== */
+document.querySelectorAll('#mainTabs .tab-btn').forEach(btn=>{
+  btn.addEventListener('click', ()=>{
+    document.querySelectorAll('#mainTabs .tab-btn').forEach(b=>b.classList.remove('active'));
+    btn.classList.add('active');
+    document.querySelectorAll('.view').forEach(v=>v.classList.remove('active'));
+    document.getElementById('view-'+btn.dataset.view).classList.add('active');
+  });
+});
+
+/* overlays */
+function openOverlay(id){ document.getElementById(id).classList.add('show'); }
+function closeOverlay(id){ document.getElementById(id).classList.remove('show'); }
+document.getElementById('openHistory').addEventListener('click', ()=>{ renderHistory(); openOverlay('historyOverlay'); });
+document.getElementById('openDashboard').addEventListener('click', ()=>{ renderDashboard(); openOverlay('dashboardOverlay'); });
+document.getElementById('openSettings').addEventListener('click', ()=> openOverlay('settingsOverlay'));
+document.querySelectorAll('[data-close]').forEach(b=> b.addEventListener('click', ()=> closeOverlay(b.dataset.close)));
+document.querySelectorAll('.overlay').forEach(o=> o.addEventListener('click', (e)=>{ if(e.target===o) o.classList.remove('show'); }));
+
+/* ===================== CALCULATOR CORE ===================== */
+const exprEl = document.getElementById('expr');
+const resultEl = document.getElementById('result');
+const modeLabel = document.getElementById('modeLabel');
+const memIndicator = document.getElementById('memIndicator');
+const degToggle = document.getElementById('degToggle');
+
+let expression = '';
+let justEvaluated = false;
+let memory = 0, hasMemory = false;
+let degrees = true;
+
+const OPS = ['+','-','×','÷','^'];
+const FN_NAMES = ['sin','cos','tan','sinh','cosh','tanh','log','ln','sqrt','cbrt','abs','fact'];
+
+function tokenize(str){
+  const tokens = []; let i=0;
+  const s = str.replace(/×/g,'*').replace(/÷/g,'/').replace(/−/g,'-').replace(/π/g,'pi');
+  while(i<s.length){
+    const c = s[i];
+    if(/\s/.test(c)){ i++; continue; }
+    if(/[0-9.]/.test(c)){ let num=''; while(i<s.length && /[0-9.]/.test(s[i])){ num+=s[i]; i++; } tokens.push({t:'num', v:parseFloat(num)}); continue; }
+    if(/[a-z]/i.test(c)){
+      let name=''; while(i<s.length && /[a-z]/i.test(s[i])){ name+=s[i]; i++; }
+      if(name==='pi'){ tokens.push({t:'num', v:Math.PI}); }
+      else if(name==='e'){ tokens.push({t:'num', v:Math.E}); }
+      else if(name==='mod'){ tokens.push({t:'op', v:'mod'}); }
+      else if(FN_NAMES.includes(name)){ tokens.push({t:'fn', v:name}); }
+      else { throw new Error('unknown token: '+name); }
+      continue;
+    }
+    if('+-*/^()'.includes(c)){ tokens.push({t:'op', v:c}); i++; continue; }
+    throw new Error('bad char: '+c);
+  }
+  return tokens;
+}
+
+function toRPN(tokens){
+  const out=[], stack=[];
+  const prec={'+':1,'-':1,'*':2,'/':2,'mod':2,'^':3};
+  const rightAssoc={'^':true};
+  for(let idx=0; idx<tokens.length; idx++){
+    const tok = tokens[idx];
+    if(tok.t==='num'){ out.push(tok); continue; }
+    if(tok.t==='fn'){ stack.push(tok); continue; }
+    if(tok.t==='op'){
+      if(tok.v==='('){ stack.push(tok); continue; }
+      if(tok.v===')'){
+        while(stack.length && !(stack[stack.length-1].t==='op' && stack[stack.length-1].v==='(')){ out.push(stack.pop()); }
+        if(!stack.length) throw new Error('mismatched parens');
+        stack.pop();
+        if(stack.length && stack[stack.length-1].t==='fn'){ out.push(stack.pop()); }
+        continue;
+      }
+      const prevTok = tokens[idx-1];
+      const isUnary = (tok.v==='-') && (!prevTok || (prevTok.t==='op' && prevTok.v!==')'));
+      if(isUnary){ stack.push({t:'op', v:'u-'}); continue; }
+      while(stack.length){
+        const top = stack[stack.length-1];
+        if(top.t==='op' && top.v!=='(' && (prec[top.v] > prec[tok.v] || (prec[top.v]===prec[tok.v] && !rightAssoc[tok.v])) ){ out.push(stack.pop()); }
+        else break;
+      }
+      stack.push(tok); continue;
+    }
+  }
+  while(stack.length){ const top=stack.pop(); if(top.v==='(') throw new Error('mismatched parens'); out.push(top); }
+  return out;
+}
+
+function factorial(n){
+  n = Math.round(n);
+  if(n<0) throw new Error('neg factorial');
+  if(n>170) return Infinity;
+  let r=1; for(let i=2;i<=n;i++) r*=i; return r;
+}
+
+function evalRPN(rpn){
+  const st = [];
+  const toRad = (v)=> degrees ? v*Math.PI/180 : v;
+  for(const tok of rpn){
+    if(tok.t==='num'){ st.push(tok.v); continue; }
+    if(tok.t==='fn'){
+      const a = st.pop(); let r;
+      switch(tok.v){
+        case 'sin': r=Math.sin(toRad(a)); break;
+        case 'cos': r=Math.cos(toRad(a)); break;
+        case 'tan': r=Math.tan(toRad(a)); break;
+        case 'sinh': r=Math.sinh(a); break;
+        case 'cosh': r=Math.cosh(a); break;
+        case 'tanh': r=Math.tanh(a); break;
+        case 'log': r=Math.log10(a); break;
+        case 'ln': r=Math.log(a); break;
+        case 'sqrt': r=Math.sqrt(a); break;
+        case 'cbrt': r=Math.cbrt(a); break;
+        case 'abs': r=Math.abs(a); break;
+        case 'fact': r=factorial(a); break;
+        default: throw new Error('unknown fn');
+      }
+      st.push(r); continue;
+    }
+    if(tok.t==='op'){
+      if(tok.v==='u-'){ st.push(-st.pop()); continue; }
+      const b=st.pop(), a=st.pop(); let r;
+      switch(tok.v){
+        case '+': r=a+b; break;
+        case '-': r=a-b; break;
+        case '*': r=a*b; break;
+        case '/': r=a/b; break;
+        case '^': r=Math.pow(a,b); break;
+        case 'mod': r=a%b; break;
+        default: throw new Error('unknown op');
+      }
+      st.push(r);
+    }
+  }
+  if(st.length!==1) throw new Error('bad expression');
+  const val = st[0];
+  if(typeof val !== 'number' || !isFinite(val)) throw new Error('bad result');
+  return val;
+}
+
+function safeEvaluate(str){
+  if(str.trim()==='') return 0;
+  return evalRPN(toRPN(tokenize(str)));
+}
+
+function formatNumber(n){
+  if(Object.is(n,-0)) n=0;
+  let s;
+  if(Math.abs(n)>0 && (Math.abs(n)<1e-9 || Math.abs(n)>=1e15)) s = n.toExponential(6);
+  else s = parseFloat(n.toFixed(10)).toString();
+  return s;
+}
+
+function render(){
+  exprEl.textContent = expression ? expression : '\u00A0';
+  if(expression===''){ resultEl.textContent='0'; return; }
+  try{ resultEl.textContent = formatNumber(safeEvaluate(expression)); }
+  catch(e){ const m = expression.match(/[0-9.]+$/); resultEl.textContent = m ? m[0] : '0'; }
+}
+
+function lastChar(){ return expression.length ? expression[expression.length-1] : ''; }
+
+function appendDigit(d){ if(justEvaluated){ expression=''; justEvaluated=false; } expression+=d; render(); }
+function appendDot(){
+  if(justEvaluated){ expression=''; justEvaluated=false; }
+  const parts = expression.split(/[+\-×÷^(]/); const current = parts[parts.length-1];
+  if(current.includes('.')) return;
+  if(current==='') expression+='0';
+  expression+='.'; render();
+}
+function appendOperator(op){
+  if(justEvaluated){ justEvaluated=false; }
+  if(expression==='' && op!=='-') return;
+  if(OPS.includes(lastChar()) && op!=='('){ expression = expression.slice(0,-1)+op; }
+  else expression += op;
+  render();
+}
+function appendFn(name){ if(justEvaluated){ expression=''; justEvaluated=false; } expression += name+'('; render(); }
+function appendParen(p){ if(justEvaluated && p==='('){ expression=''; justEvaluated=false; } expression+=p; render(); }
+function insertRaw(str){ if(justEvaluated){ expression=''; justEvaluated=false; } expression+=str; render(); }
+function del(){ justEvaluated=false; expression = expression.slice(0,-1); render(); }
+function clearAll(){ expression=''; justEvaluated=false; render(); }
+
+function percent(){
+  if(expression==='') return;
+  try{ expression = formatNumber(safeEvaluate(expression)/100); render(); }catch(e){}
+}
+function transformCurrent(fn){
+  if(expression==='') return;
+  try{ expression = formatNumber(fn(safeEvaluate(expression))); justEvaluated=true; render(); }catch(e){}
+}
+
+function pushHistory(expr, res, note){
+  if(!settings.saveHistory) return;
+  history.unshift({ id: Date.now()+Math.random().toString(16).slice(2), expr, res, ts: Date.now(), fav:false, pin:false, note: note||'' });
+  if(history.length>500) history.pop();
+  saveHistoryLS();
+}
+
+function equals(){
+  if(expression==='') return;
+  try{
+    const val = safeEvaluate(expression);
+    const resStr = formatNumber(val);
+    pushHistory(expression, resStr);
+    expression = resStr; justEvaluated = true; render();
+    if(settings.voiceOut) speak(resStr);
+  }catch(e){ resultEl.textContent = 'Error'; }
+}
+
+/* memory */
+function updateMemIndicator(){ memIndicator.classList.toggle('show', hasMemory); }
+function currentVal(){ try{ return expression? safeEvaluate(expression) : (parseFloat(resultEl.textContent)||0); }catch(e){ return 0; } }
+function mPlus(){ memory += currentVal(); hasMemory=true; updateMemIndicator(); }
+function mMinus(){ memory -= currentVal(); hasMemory=true; updateMemIndicator(); }
+function mRecall(){ if(!hasMemory) return; if(justEvaluated){ expression=''; justEvaluated=false; } expression += formatNumber(memory); render(); }
+function mClear(){ memory=0; hasMemory=false; updateMemIndicator(); }
+
+/* mode pills (basic/scientific) */
+document.querySelectorAll('.pill').forEach(p=>{
+  p.addEventListener('click', ()=>{
+    document.querySelectorAll('.pill').forEach(x=>x.classList.remove('active'));
+    p.classList.add('active');
+    const sci = p.dataset.mode==='sci';
+    document.getElementById('sciBlock').style.display = sci ? 'block' : 'none';
+    modeLabel.textContent = sci ? 'SCIENTIFIC' : 'READY';
+  });
+});
+degToggle.addEventListener('click', ()=>{ degrees=!degrees; degToggle.textContent = degrees?'DEG':'RAD'; });
+
+/* button wiring */
+document.querySelectorAll('#view-calc .keys').forEach(kw=>{
+  kw.addEventListener('click', (e)=>{
+    const btn = e.target.closest('button'); if(!btn) return;
+    btn.classList.add('flash'); setTimeout(()=>btn.classList.remove('flash'),150);
+    beep(); vibrate();
+
+    const action = btn.dataset.action, value = btn.dataset.value, fn = btn.dataset.fn;
+    if(action==='clear') return clearAll();
+    if(action==='del') return del();
+    if(action==='percent') return percent();
+    if(action==='equals') return equals();
+    if(action==='mplus') return mPlus();
+    if(action==='mminus') return mMinus();
+    if(action==='mr') return mRecall();
+    if(action==='mc') return mClear();
+    if(action==='pi') return insertRaw('π');
+    if(action==='euler') return insertRaw('e');
+    if(action==='sq') return transformCurrent(v=>Math.pow(v,2));
+    if(action==='cube') return transformCurrent(v=>Math.pow(v,3));
+    if(action==='pow10') return transformCurrent(v=>Math.pow(10,v));
+    if(action==='inv') return transformCurrent(v=>1/v);
+    if(action==='fact') return transformCurrent(v=>factorial(v));
+    if(action==='rand') return insertRaw(Math.random().toFixed(4));
+    if(action==='roundf') return transformCurrent(v=>Math.round(v));
+    if(action==='floorf') return transformCurrent(v=>Math.floor(v));
+    if(action==='modop') return appendOperator('mod');
+
+    if(fn) return appendFn(fn);
+    if(value==='.') return appendDot();
+    if(value==='(' || value===')') return appendParen(value);
+    if(OPS.includes(value)) return appendOperator(value);
+    if(value!==undefined) return appendDigit(value);
+  });
+});
+
+document.getElementById('doNpr').addEventListener('click', ()=>{
+  const n = parseInt(document.getElementById('nprN').value), r = parseInt(document.getElementById('nprR').value);
+  if(isNaN(n)||isNaN(r)||r>n){ toast('Invalid n,r'); return; }
+  const val = factorial(n)/factorial(n-r);
+  expression = formatNumber(val); justEvaluated=true; render();
+  pushHistory('nPr('+n+','+r+')', formatNumber(val));
+});
+document.getElementById('doNcr').addEventListener('click', ()=>{
+  const n = parseInt(document.getElementById('nprN').value), r = parseInt(document.getElementById('nprR').value);
+  if(isNaN(n)||isNaN(r)||r>n){ toast('Invalid n,r'); return; }
+  const val = factorial(n)/(factorial(r)*factorial(n-r));
+  expression = formatNumber(val); justEvaluated=true; render();
+  pushHistory('nCr('+n+','+r+')', formatNumber(val));
+});
+
+/* copy result */
+resultEl.addEventListener('click', async ()=>{
+  try{ await navigator.clipboard.writeText(resultEl.textContent); toast('Result copied!'); }catch(e){}
+});
+
+/* keyboard */
+const keyMap = { '+':'+', '-':'-', '*':'×', '/':'÷', '^':'^' };
+window.addEventListener('keydown', (e)=>{
+  const active = document.activeElement;
+  if(active && (active.tagName==='INPUT' || active.tagName==='SELECT')) return;
+  if(/^[0-9]$/.test(e.key)) return appendDigit(e.key);
+  if(e.key==='.') return appendDot();
+  if(keyMap[e.key]) return appendOperator(keyMap[e.key]);
+  if(e.key==='(' || e.key===')') return appendParen(e.key);
+  if(e.key==='Enter' || e.key==='=') { e.preventDefault(); return equals(); }
+  if(e.key==='Backspace') return del();
+  if(e.key==='Escape') return clearAll();
+  if(e.key==='%') return percent();
+});
+
+render(); updateMemIndicator();
+
+/* ===================== VOICE INPUT / OUTPUT ===================== */
+function speak(text){
+  if(!('speechSynthesis' in window)) return;
+  const u = new SpeechSynthesisUtterance(text);
+  u.lang = settings.lang==='hi' ? 'hi-IN' : 'en-US';
+  speechSynthesis.speak(u);
+}
+document.getElementById('voiceOutToggle').addEventListener('click', (e)=>{
+  settings.voiceOut = !settings.voiceOut; saveSettings();
+  e.target.classList.toggle('active-toggle', settings.voiceOut);
+  toast('Voice output: ' + (settings.voiceOut?'ON':'OFF'));
+});
+
+const SpeechRec = window.SpeechRecognition || window.webkitSpeechRecognition;
+document.getElementById('voiceInBtn').addEventListener('click', ()=>{
+  if(!SpeechRec){ toast('Voice input not supported in this browser'); return; }
+  const rec = new SpeechRec();
+  rec.lang = settings.lang==='hi' ? 'hi-IN' : 'en-US';
+  rec.onresult = (ev)=>{
+    let text = ev.results[0][0].transcript.toLowerCase();
+    text = text.replace(/plus/g,'+').replace(/minus/g,'-')
+      .replace(/into|times|multiplied by|multiply/g,'*')
+      .replace(/divide(d)? by|divide/g,'/')
+      .replace(/percent/g,'%').replace(/point/g,'.')
+      .replace(/open bracket/g,'(').replace(/close bracket/g,')');
+    const clean = text.replace(/[^0-9+\-*/.() ]/g,'').trim();
+    if(clean){ expression += clean.replace(/\s+/g,''); render(); toast('Heard: '+clean); }
+    if(/equal/.test(text)) equals();
+  };
+  rec.onerror = ()=> toast('Voice input error');
+  rec.start();
+  toast('Listening...');
+});
+
+/* ===================== OCR ===================== */
+document.getElementById('ocrInput').addEventListener('change', (e)=>{
+  const file = e.target.files[0]; if(!file) return;
+  const status = document.getElementById('ocrStatus');
+  if(typeof Tesseract === 'undefined'){ status.textContent='OCR library load nahi hui (internet check karo)'; return; }
+  status.textContent = 'Reading image...';
+  Tesseract.recognize(file, 'eng').then(({data})=>{
+    const text = data.text;
+    const match = text.match(/[0-9+\-*/.() ]{3,}/);
+    if(match){
+      expression = match[0].replace(/\s+/g,'');
+      render();
+      status.textContent = 'Detected: ' + expression;
+    } else {
+      status.textContent = 'Koi calculation image me nahi mila';
+    }
+  }).catch(()=>{ status.textContent = 'OCR fail ho gaya'; });
+});
+
+/* ===================== SHARE / PRINT ===================== */
+document.getElementById('shareBtn').addEventListener('click', async ()=>{
+  const text = `${expression} = ${resultEl.textContent}`;
+  if(navigator.share){ try{ await navigator.share({text}); }catch(e){} }
+  else { await navigator.clipboard.writeText(text); toast('Copied (share not supported)'); }
+});
+document.getElementById('printBtn').addEventListener('click', ()=>{
+  const w = window.open('', '_blank');
+  w.document.write(`<pre style="font-size:22px;font-family:monospace;padding:40px;">${expression}\n= ${resultEl.textContent}</pre>`);
+  w.document.close(); w.print();
+});
+
+/* ===================== PROGRAMMER CALCULATOR ===================== */
+(function(){
+  let pBase = 16;
+  let acc = 0, pending = null, pendingOp = null;
+
+  const disp = { hex: document.getElementById('pHex'), dec: document.getElementById('pDec'), oct: document.getElementById('pOct'), bin: document.getElementById('pBin') };
+
+  function updateDisp(v){
+    disp.hex.textContent = (v>>>0).toString(16).toUpperCase();
+    disp.dec.textContent = v.toString(10);
+    disp.oct.textContent = (v>>>0).toString(8);
+    disp.bin.textContent = (v>>>0).toString(2);
+  }
+  updateDisp(0);
+
+  document.querySelectorAll('#view-programmer .sub-tab').forEach(t=>{
+    t.addEventListener('click', ()=>{
+      document.querySelectorAll('#view-programmer .sub-tab').forEach(x=>x.classList.remove('active'));
+      t.classList.add('active');
+      pBase = parseInt(t.dataset.base);
+      updateKeyState();
+    });
+  });
+  function updateKeyState(){
+    document.querySelectorAll('[data-pk]').forEach(btn=>{
+      const val = parseInt(btn.dataset.pk, 16);
+      btn.disabled = val >= pBase;
+    });
+  }
+  updateKeyState();
+
+  let entry = '0';
+  document.getElementById('progKeys').addEventListener('click', (e)=>{
+    const btn = e.target.closest('button'); if(!btn) return;
+    beep(); vibrate();
+    const pk = btn.dataset.pk, pa = btn.dataset.pa;
+    if(pk !== undefined){
+      entry = (entry==='0') ? pk : entry+pk;
+      const v = parseInt(entry, pBase) || 0;
+      updateDisp(v);
+      return;
+    }
+    const current = parseInt(entry, pBase) || 0;
+    if(pa==='clear'){ entry='0'; acc=0; pending=null; pendingOp=null; updateDisp(0); return; }
+    if(pa==='del'){ entry = entry.length>1 ? entry.slice(0,-1) : '0'; updateDisp(parseInt(entry,pBase)||0); return; }
+    if(pa==='NOT'){ const v = ~current; entry = (v>>>0).toString(pBase); updateDisp(v); return; }
+    if(['AND','OR','XOR','LSH','RSH','+','-','*'].includes(pa)){
+      pending = current; pendingOp = pa; entry='0'; return;
+    }
+    if(pa==='='){
+      if(pendingOp===null){ return; }
+      let r;
+      switch(pendingOp){
+        case 'AND': r = pending & current; break;
+        case 'OR': r = pending | current; break;
+        case 'XOR': r = pending ^ current; break;
+        case 'LSH': r = pending << current; break;
+        case 'RSH': r = pending >> current; break;
+        case '+': r = pending + current; break;
+        case '-': r = pending - current; break;
+        case '*': r = pending * current; break;
+      }
+      updateDisp(r); entry = (r>>>0).toString(pBase);
+      pushHistory(`${pending} ${pendingOp} ${current} (base ${pBase})`, r.toString());
+      pending=null; pendingOp=null;
+    }
+  });
+})();
+
+/* ===================== FINANCIAL CALCULATOR ===================== */
+const finForms = {
+  emi: { title:'EMI Calculator', fields:[['principal','Loan Amount (₹)'],['rate','Interest Rate (% p.a.)'],['tenure','Tenure (months)']],
+    calc:(v)=>{ const P=+v.principal, r=+v.rate/12/100, n=+v.tenure;
+      const emi = r===0 ? P/n : P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+      const total = emi*n, interest = total-P;
+      return [['EMI', '₹'+emi.toFixed(2), true],['Total Payment','₹'+total.toFixed(2)],['Total Interest','₹'+interest.toFixed(2)]]; } },
+  gst: { title:'GST Calculator', fields:[['amount','Amount (₹)'],['gst','GST %']],
+    calc:(v)=>{ const A=+v.amount, g=+v.gst; const gstAmt = A*g/100;
+      return [['GST Amount','₹'+gstAmt.toFixed(2), true],['Amount + GST','₹'+(A+gstAmt).toFixed(2)],['Amount - GST (if inclusive)','₹'+(A-(A*g/(100+g))).toFixed(2)]]; } },
+  discount: { title:'Discount Calculator', fields:[['price','Original Price (₹)'],['discount','Discount %']],
+    calc:(v)=>{ const P=+v.price, d=+v.discount; const saved=P*d/100;
+      return [['Final Price','₹'+(P-saved).toFixed(2), true],['You Save','₹'+saved.toFixed(2)]]; } },
+  tip: { title:'Tip Calculator', fields:[['bill','Bill Amount (₹)'],['tip','Tip %'],['people','Split Between (people)']],
+    calc:(v)=>{ const B=+v.bill, t=+v.tip, p=+v.people||1; const tipAmt=B*t/100; const total=B+tipAmt;
+      return [['Tip Amount','₹'+tipAmt.toFixed(2), true],['Total Bill','₹'+total.toFixed(2)],['Per Person','₹'+(total/p).toFixed(2)]]; } },
+  loan: { title:'Loan Calculator', fields:[['principal','Loan Amount (₹)'],['rate','Interest Rate (% p.a.)'],['tenure','Tenure (years)']],
+    calc:(v)=>{ const P=+v.principal, r=+v.rate/12/100, n=+v.tenure*12;
+      const emi = r===0 ? P/n : P*r*Math.pow(1+r,n)/(Math.pow(1+r,n)-1);
+      const total = emi*n;
+      return [['Monthly EMI','₹'+emi.toFixed(2), true],['Total Payable','₹'+total.toFixed(2)],['Total Interest','₹'+(total-P).toFixed(2)]]; } },
+  sip: { title:'SIP Calculator', fields:[['monthly','Monthly Investment (₹)'],['rate','Expected Return (% p.a.)'],['years','Duration (years)']],
+    calc:(v)=>{ const P=+v.monthly, i=+v.rate/12/100, n=+v.years*12;
+      const fv = i===0 ? P*n : P*((Math.pow(1+i,n)-1)/i)*(1+i);
+      const invested = P*n;
+      return [['Maturity Value','₹'+fv.toFixed(2), true],['Total Invested','₹'+invested.toFixed(2)],['Wealth Gained','₹'+(fv-invested).toFixed(2)]]; } },
+  fd: { title:'FD Calculator', fields:[['principal','Principal (₹)'],['rate','Interest Rate (% p.a.)'],['years','Tenure (years)']],
+    calc:(v)=>{ const P=+v.principal, r=+v.rate/100, n=+v.years; const m=4; const maturity = P*Math.pow(1+r/m, m*n);
+      return [['Maturity Amount','₹'+maturity.toFixed(2), true],['Interest Earned','₹'+(maturity-P).toFixed(2)]]; } },
+  rd: { title:'RD Calculator', fields:[['monthly','Monthly Deposit (₹)'],['rate','Interest Rate (% p.a.)'],['months','Tenure (months)']],
+    calc:(v)=>{ const P=+v.monthly, r=+v.rate/100, n=+v.months;
+      const maturity = P*n + P*n*(n+1)/2*(r/12);
+      return [['Maturity Amount','₹'+maturity.toFixed(2), true],['Total Deposited','₹'+(P*n).toFixed(2)],['Interest Earned','₹'+(maturity-P*n).toFixed(2)]]; } },
+  si: { title:'Simple Interest', fields:[['principal','Principal (₹)'],['rate','Rate (% p.a.)'],['time','Time (years)']],
+    calc:(v)=>{ const P=+v.principal, R=+v.rate, T=+v.time; const si=P*R*T/100;
+      return [['Simple Interest','₹'+si.toFixed(2), true],['Total Amount','₹'+(P+si).toFixed(2)]]; } },
+  ci: { title:'Compound Interest', fields:[['principal','Principal (₹)'],['rate','Rate (% p.a.)'],['time','Time (years)'],['freq','Compounding per year']],
+    calc:(v)=>{ const P=+v.principal, R=+v.rate, T=+v.time, n=+v.freq||1;
+      const amt = P*Math.pow(1+R/(100*n), n*T); const ci = amt-P;
+      return [['Compound Interest','₹'+ci.toFixed(2), true],['Total Amount','₹'+amt.toFixed(2)]]; } },
+};
+
+function renderFinForm(key){
+  const cfg = finForms[key];
+  const form = document.getElementById('finForm');
+  form.innerHTML = `<div class="form-title">${cfg.title}</div>` +
+    cfg.fields.map(([id,label])=>`<div class="field"><label>${label}</label><input type="number" id="fin_${id}" step="any"></div>`).join('') +
+    `<button class="btn-primary" id="finCalc">Calculate</button>`;
+  document.getElementById('finCalc').addEventListener('click', ()=>{
+    const v = {}; cfg.fields.forEach(([id])=> v[id] = document.getElementById('fin_'+id).value || 0);
+    try{
+      const rows = cfg.calc(v);
+      const resBox = document.getElementById('finResult');
+      resBox.innerHTML = rows.map(([l,val,main])=> main ? `<div class="r-main">${val}</div><div class="mode-label">${l}</div>` : `<div class="r-line">${l}<b>${val}</b></div>`).join('');
+      pushHistory(cfg.title, rows[0][1]);
+    }catch(e){ toast('Invalid input'); }
+  });
+}
+document.querySelectorAll('#finTabs .sub-tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('#finTabs .sub-tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active'); renderFinForm(t.dataset.fin);
+  });
+});
+renderFinForm('emi');
+
+/* ===================== HEALTH CALCULATOR ===================== */
+const healthForms = {
+  bmi: { title:'BMI Calculator', fields:[['weight','Weight (kg)'],['height','Height (cm)']],
+    calc:(v)=>{ const w=+v.weight, h=+v.height/100; const bmi=w/(h*h);
+      let cat = bmi<18.5?'Underweight':bmi<25?'Normal':bmi<30?'Overweight':'Obese';
+      return [['BMI', bmi.toFixed(1), true],['Category', cat]]; } },
+  age: { title:'Age Calculator', fields:[['dob','Date of Birth']], types:{dob:'date'},
+    calc:(v)=>{ const dob=new Date(v.dob); const now=new Date();
+      let y=now.getFullYear()-dob.getFullYear(), m=now.getMonth()-dob.getMonth(), d=now.getDate()-dob.getDate();
+      if(d<0){ m--; d += new Date(now.getFullYear(), now.getMonth(), 0).getDate(); }
+      if(m<0){ y--; m+=12; }
+      return [['Age', `${y}y ${m}m ${d}d`, true]]; } },
+  bmr: { title:'BMR Calculator', fields:[['weight','Weight (kg)'],['height','Height (cm)'],['age','Age (years)'],['gender','Gender (m/f)']],
+    calc:(v)=>{ const w=+v.weight, h=+v.height, a=+v.age; const isM = String(v.gender).toLowerCase().startsWith('m');
+      const bmr = isM ? 10*w+6.25*h-5*a+5 : 10*w+6.25*h-5*a-161;
+      return [['BMR (kcal/day)', bmr.toFixed(0), true]]; } },
+  ideal: { title:'Ideal Weight Calculator', fields:[['height','Height (cm)'],['gender','Gender (m/f)']],
+    calc:(v)=>{ const hIn = (+v.height)/2.54; const isM = String(v.gender).toLowerCase().startsWith('m');
+      const ideal = isM ? 50+2.3*(hIn-60) : 45.5+2.3*(hIn-60);
+      return [['Ideal Weight (kg)', ideal.toFixed(1), true]]; } },
+};
+function renderHealthForm(key){
+  const cfg = healthForms[key];
+  const form = document.getElementById('healthForm');
+  form.innerHTML = `<div class="form-title">${cfg.title}</div>` +
+    cfg.fields.map(([id,label])=>{ const type = (cfg.types&&cfg.types[id]) || (id==='gender'?'text':'number');
+      return `<div class="field"><label>${label}</label><input type="${type}" id="health_${id}" ${id==='gender'?'placeholder="m or f"':''}></div>`; }).join('') +
+    `<button class="btn-primary" id="healthCalc">Calculate</button>`;
+  document.getElementById('healthCalc').addEventListener('click', ()=>{
+    const v={}; cfg.fields.forEach(([id])=> v[id]=document.getElementById('health_'+id).value);
+    try{
+      const rows = cfg.calc(v);
+      const resBox = document.getElementById('healthResult');
+      resBox.innerHTML = rows.map(([l,val,main])=> main ? `<div class="r-main">${val}</div><div class="mode-label">${l}</div>` : `<div class="r-line">${l}<b>${val}</b></div>`).join('');
+      pushHistory(cfg.title, String(rows[0][1]));
+    }catch(e){ toast('Invalid input'); }
+  });
+}
+document.querySelectorAll('#healthTabs .sub-tab').forEach(t=>{
+  t.addEventListener('click', ()=>{
+    document.querySelectorAll('#healthTabs .sub-tab').forEach(x=>x.classList.remove('active'));
+    t.classList.add('active'); renderHealthForm(t.dataset.health);
+  });
+});
+renderHealthForm('bmi');
+
+/* ===================== UNIT CONVERTER ===================== */
+const unitCategories = {
+  Length: { m:1, km:1000, cm:0.01, mm:0.001, mile:1609.34, yard:0.9144, foot:0.3048, inch:0.0254 },
+  Weight: { kg:1, g:0.001, mg:0.000001, ton:1000, pound:0.453592, ounce:0.0283495 },
+  Area: { sqm:1, sqkm:1e6, sqft:0.092903, sqyard:0.836127, acre:4046.86, hectare:10000 },
+  Volume: { liter:1, ml:0.001, gallon:3.78541, cubicm:1000, cubicft:28.3168 },
+  Speed: { 'm/s':1, 'km/h':0.277778, mph:0.44704, knot:0.514444 },
+  Time: { sec:1, min:60, hour:3600, day:86400, week:604800 },
+  Data: { byte:1, KB:1024, MB:1048576, GB:1073741824, TB:1099511627776, bit:0.125 },
+  Pressure: { pascal:1, bar:100000, atm:101325, psi:6894.76, torr:133.322 },
+  Energy: { joule:1, kJ:1000, calorie:4.184, kcal:4184, kWh:3600000 },
+  Temperature: { celsius:'C', fahrenheit:'F', kelvin:'K' },
+};
+const catSel = document.getElementById('convCategory'), fromSel = document.getElementById('convFrom'), toSel = document.getElementById('convTo');
+Object.keys(unitCategories).forEach(c=> catSel.innerHTML += `<option value="${c}">${c}</option>`);
+function populateUnits(cat){
+  const units = Object.keys(unitCategories[cat]);
+  fromSel.innerHTML = units.map(u=>`<option value="${u}">${u}</option>`).join('');
+  toSel.innerHTML = units.map(u=>`<option value="${u}">${u}</option>`).join('');
+  if(units.length>1) toSel.selectedIndex = 1;
+}
+populateUnits(catSel.value);
+catSel.addEventListener('change', ()=> populateUnits(catSel.value));
+
+function convertTemp(val, from, to){
+  let c;
+  if(from==='celsius') c=val; else if(from==='fahrenheit') c=(val-32)*5/9; else c=val-273.15;
+  if(to==='celsius') return c; if(to==='fahrenheit') return c*9/5+32; return c+273.15;
+}
+document.getElementById('convGo').addEventListener('click', ()=>{
+  const cat = catSel.value, from = fromSel.value, to = toSel.value, val = parseFloat(document.getElementById('convValue').value)||0;
+  let result;
+  if(cat==='Temperature'){ result = convertTemp(val, from, to); }
+  else { const table = unitCategories[cat]; result = val * table[from] / table[to]; }
+  const box = document.getElementById('convResult');
+  box.style.display='block';
+  box.innerHTML = `<div class="r-main">${formatNumber(result)} ${to}</div><div class="mode-label">${val} ${from} =</div>`;
+  pushHistory(`${val} ${from} → ${to}`, formatNumber(result));
+});
+
+/* ===================== CURRENCY CONVERTER ===================== */
+const currencies = ['INR','USD','EUR','GBP','JPY','AED'];
+const curFrom = document.getElementById('curFrom'), curTo = document.getElementById('curTo');
+currencies.forEach(c=>{ curFrom.innerHTML += `<option ${c==='USD'?'selected':''}>${c}</option>`; curTo.innerHTML += `<option ${c==='INR'?'selected':''}>${c}</option>`; });
+
+let rates = null;
+const rateStatus = document.getElementById('rateStatus');
+function fetchRates(){
+  rateStatus.textContent = ' (fetching live rates...)';
+  fetch('https://open.er-api.com/v6/latest/USD').then(r=>r.json()).then(data=>{
+    if(data && data.rates){ rates = data.rates; rateStatus.textContent = ' (live rates loaded)'; }
+    else throw new Error('bad data');
+  }).catch(()=>{ rateStatus.textContent = ' (live rates unavailable — check internet)'; });
+}
+fetchRates();
+document.getElementById('curRefresh').addEventListener('click', fetchRates);
+document.getElementById('curGo').addEventListener('click', ()=>{
+  const from = curFrom.value, to = curTo.value, val = parseFloat(document.getElementById('curValue').value)||0;
+  const box = document.getElementById('curResult'); box.style.display='block';
+  if(!rates){ box.innerHTML = `<div class="mode-label">Live rates load nahi hui — Refresh dabao (internet chahiye)</div>`; return; }
+  const usdVal = val / (rates[from]||1);
+  const result = usdVal * (rates[to]||1);
+  box.innerHTML = `<div class="r-main">${result.toFixed(2)} ${to}</div><div class="mode-label">${val} ${from} =</div>`;
+  pushHistory(`${val} ${from} → ${to}`, result.toFixed(2));
+});
+
+/* ===================== HISTORY PANEL ===================== */
+function renderHistory(){
+  const list = document.getElementById('historyList');
+  const q = (document.getElementById('histSearch').value||'').toLowerCase();
+  let items = history.filter(h => h.expr.toLowerCase().includes(q) || h.res.toLowerCase().includes(q));
+  items.sort((a,b)=> (b.pin-a.pin) || (b.ts-a.ts));
+  if(!items.length){ list.innerHTML = '<div class="hist-empty">Koi calculation nahi mili</div>'; return; }
+  list.innerHTML = items.map(h => `
+    <div class="hist-item" data-id="${h.id}">
+      <div class="h-top">
+        <div>
+          <div class="h-expr">${h.expr}</div>
+          <div class="h-res">= ${h.res}</div>
+        </div>
+        <div class="hist-actions">
+          <button data-act="fav" class="${h.fav?'on':''}" title="Favorite">⭐</button>
+          <button data-act="pin" class="${h.pin?'on':''}" title="Pin">📌</button>
+          <button data-act="note" title="Add note">📝</button>
+          <button data-act="del" title="Delete">🗑️</button>
+        </div>
+      </div>
+      ${h.note ? `<div class="h-note">📝 ${h.note}</div>` : ''}
+    </div>`).join('');
+}
+document.getElementById('histSearch').addEventListener('input', renderHistory);
+document.getElementById('historyList').addEventListener('click', (e)=>{
+  const btn = e.target.closest('button');
+  const item = e.target.closest('.hist-item'); if(!item) return;
+  const id = item.dataset.id;
+  const h = history.find(x=>x.id===id); if(!h) return;
+  if(!btn){
+    expression = h.expr; justEvaluated = false; render(); closeOverlay('historyOverlay'); return;
+  }
+  const act = btn.dataset.act;
+  if(act==='fav'){ h.fav = !h.fav; }
+  else if(act==='pin'){ h.pin = !h.pin; }
+  else if(act==='del'){ history = history.filter(x=>x.id!==id); }
+  else if(act==='note'){ const n = prompt('Note likho:', h.note||''); if(n!==null) h.note = n; }
+  saveHistoryLS(); renderHistory();
+});
+document.getElementById('histClearAll').addEventListener('click', ()=>{
+  if(confirm('Puri history delete karni hai?')){ history = []; saveHistoryLS(); renderHistory(); }
+});
+document.getElementById('histExportCsv').addEventListener('click', ()=>{
+  const rows = [['Expression','Result','Note','Date']].concat(history.map(h=>[h.expr,h.res,h.note||'', new Date(h.ts).toLocaleString()]));
+  const csv = rows.map(r=> r.map(c=>`"${String(c).replace(/"/g,'""')}"`).join(',')).join('\n');
+  const blob = new Blob([csv], {type:'text/csv'});
+  const a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'calculator-history.csv'; a.click();
+});
+document.getElementById('histExportPdf').addEventListener('click', ()=>{
+  if(typeof window.jspdf === 'undefined'){ toast('PDF library load nahi hui'); return; }
+  const { jsPDF } = window.jspdf;
+  const doc = new jsPDF();
+  doc.setFontSize(14); doc.text('Calculator History', 14, 16);
+  doc.setFontSize(10);
+  let y = 28;
+  history.slice(0,60).forEach(h=>{
+    doc.text(`${h.expr} = ${h.res}`, 14, y); y += 7;
+    if(y>280){ doc.addPage(); y=20; }
+  });
+  doc.save('calculator-history.pdf');
+});
+document.getElementById('histPrint').addEventListener('click', ()=>{
+  const w = window.open('', '_blank');
+  w.document.write('<h2>Calculator History</h2>' + history.map(h=>`<p>${h.expr} = <b>${h.res}</b></p>`).join(''));
+  w.document.close(); w.print();
+});
+
+/* ===================== DASHBOARD ===================== */
+function renderDashboard(){
+  document.getElementById('statTotal').textContent = history.length;
+  const todayStr = new Date().toDateString();
+  document.getElementById('statToday').textContent = history.filter(h=> new Date(h.ts).toDateString()===todayStr).length;
+  document.getElementById('statFav').textContent = history.filter(h=>h.fav).length;
+
+  const opCount = {'+':0,'-':0,'*':0,'/':0,'^':0};
+  history.forEach(h=> Object.keys(opCount).forEach(op=>{ opCount[op] += (h.expr.match(new RegExp('\\'+op,'g'))||[]).length; }));
+  const best = Object.entries(opCount).sort((a,b)=>b[1]-a[1])[0];
+  document.getElementById('statOp').textContent = best && best[1]>0 ? best[0] : '-';
+
+  const days = [];
+  for(let i=6;i>=0;i--){
+    const d = new Date(); d.setDate(d.getDate()-i);
+    const count = history.filter(h=> new Date(h.ts).toDateString()===d.toDateString()).length;
+    days.push({label: d.toLocaleDateString(undefined,{weekday:'short'}), count});
+  }
+  const max = Math.max(1, ...days.map(d=>d.count));
+  document.getElementById('weekBars').innerHTML = days.map(d=>`<div class="bar" style="height:${Math.max(4,(d.count/max)*80)}px"></div>`).join('');
+  document.getElementById('weekLbls').innerHTML = days.map(d=>`<span>${d.label}</span>`).join('');
+}
+
+/* ===================== SETTINGS PANEL ===================== */
+const themes = ['glass','light','neon','material','ocean','sunset','forest','mono','pastel'];
+const themeGrid = document.getElementById('themeGrid');
+const themeSwatch = { glass:'#7dffb3', light:'#0e9f6e', neon:'#ff2ec4', material:'#03dac6', ocean:'#4fd1c5', sunset:'#ff7e5f', forest:'#7bd389', mono:'#e6e6e6', pastel:'#f7a1c4' };
+themes.forEach(t=>{
+  const dot = document.createElement('div');
+  dot.className = 'theme-dot' + (settings.theme===t ? ' active' : '');
+  dot.style.background = themeSwatch[t];
+  dot.title = t;
+  dot.addEventListener('click', ()=>{
+    settings.theme = t; saveSettings(); applyTheme();
+    document.querySelectorAll('.theme-dot').forEach(d=>d.classList.remove('active'));
+    dot.classList.add('active');
+  });
+  themeGrid.appendChild(dot);
+});
+
+function wireSwitch(id, key){
+  const el = document.getElementById(id);
+  el.classList.toggle('on', settings[key]);
+  el.addEventListener('click', ()=>{
+    settings[key] = !settings[key]; saveSettings();
+    el.classList.toggle('on', settings[key]);
+  });
+}
+wireSwitch('swSaveHistory','saveHistory');
+wireSwitch('swSound','sound');
+wireSwitch('swVibrate','vibrate');
+wireSwitch('swVoiceOut','voiceOut');
+
+const langSelect = document.getElementById('langSelect');
+langSelect.value = settings.lang;
+const i18n = {
+  en:{ title:'Advanced Calculator Pro', history:'History', dashboard:'Dashboard', settings:'Settings', tabCalc:'🧮 Calculator', tabProg:'🟣 Programmer', tabFin:'🟡 Financial', tabHealth:'🟢 Health', tabConv:'🔵 Unit Converter', tabCur:'🟣 Currency' },
+  hi:{ title:'एडवांस्ड कैलकुलेटर प्रो', history:'हिस्ट्री', dashboard:'डैशबोर्ड', settings:'सेटिंग्स', tabCalc:'🧮 कैलकुलेटर', tabProg:'🟣 प्रोग्रामर', tabFin:'🟡 फाइनेंशियल', tabHealth:'🟢 हेल्थ', tabConv:'🔵 यूनिट कन्वर्टर', tabCur:'🟣 करेंसी' },
+};
+function applyLang(){
+  const dict = i18n[settings.lang] || i18n.en;
+  document.querySelectorAll('[data-i18n]').forEach(el=>{
+    const key = el.dataset.i18n; if(dict[key]) el.textContent = dict[key];
+  });
+}
+applyLang();
+langSelect.addEventListener('change', ()=>{ settings.lang = langSelect.value; saveSettings(); applyLang(); });
+
+const fontSelect = document.getElementById('fontSelect');
+fontSelect.value = settings.font;
+fontSelect.addEventListener('change', ()=>{ settings.font = parseFloat(fontSelect.value); saveSettings(); applyTheme(); });
+
+})();
+</script>
+</body>
+</html>
